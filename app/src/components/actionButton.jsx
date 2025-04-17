@@ -1,4 +1,4 @@
-function ActionButton({ label, icon: Icon, onClick, className }) {
+export function ActionButton({ label, icon: Icon, onClick, className }) {
     return (
       <button
         onClick={onClick}

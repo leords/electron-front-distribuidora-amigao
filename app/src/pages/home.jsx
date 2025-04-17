@@ -10,7 +10,7 @@ export function Dashboard(){
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       {/* Título */}
       <div className="bg-gradient-to-br from-red-400 to-red-600 text-white py-4 w-full text-center flex flex-row">
-          <div className="w-full"><h1 className="text-3xl font-semibold">Dashboard SysNext</h1></div>
+          <div className="w-full"><h1 className="text-3xl font-semibold">Inicio SysNext</h1></div>
           <div className="w-full flex flex-row gap-2 items-center justify-start absolute px-10">
             <FaRegUserCircle className="text-xl"/>
             <p>leo</p>

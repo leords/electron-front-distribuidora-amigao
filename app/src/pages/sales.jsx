@@ -3,9 +3,10 @@ import { FaPlus, FaTrash, FaList, FaSearch, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import {ActionButton} from '../components/actionButton'
 
+
 export function VendasPage() {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleButtonClick = (action) => {
     alert(`Ação selecionada: ${action}`);

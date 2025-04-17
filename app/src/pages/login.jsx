@@ -1,19 +1,40 @@
 
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo_amigao.png'
+import React, { useState } from 'react';
+import { login } from '../services/authService';
 
-
+// Página de login
 export function LoginPage() {
+
   const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false);
 
-  function nextPage() {
-    try {
-      navigate('/home')
-    } catch (error) {
-      alert(error)
-    }
+
+// Nageva para a Home após o login
+  async function handleLogin(event) {
+    event.preventDefault();
+
+  try {
+    setLoading(true);
+    const userData = await login({email, password});
+    console.log('Usuário autenticado', userData);
+    console.log('Name', userData.result.user.name)
+
+      // Aqui você poderia salvar o token no localStorage, se retornar um
+      // localStorage.setItem('token', userData.token);
+
+    navigate('/home')
+    
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    setLoading(false)
   }
-
+} 
+  
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Coluna Esquerda: Nome do Sistema */}
@@ -35,7 +56,7 @@ export function LoginPage() {
           </div>
 
           {/* Formulário */}
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label
                 htmlFor="login"
@@ -48,6 +69,9 @@ export function LoginPage() {
                 id="login"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-300"
                 placeholder="Digite seu login"
+                value={email || ''}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="mb-6">
@@ -62,14 +86,17 @@ export function LoginPage() {
                 id="password"
                 className="w-full mb-8 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-300"
                 placeholder="Digite sua senha"
+                value={password || ''}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <button
-              onClick={nextPage}
+              
               type="submit"
               className="w-full px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
             >
-              Entrar
+              { loading ? 'Entrando...' : 'Entrar' }
             </button>
           </form>
 
