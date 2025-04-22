@@ -2,30 +2,27 @@
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo_amigao.png'
 import React, { useState } from 'react';
-import { login } from '../services/authService';
+import { loginAPI } from '../services/authService.js';
+import { useAuth } from '../components/authContext.jsx';
 
 // Página de login
 export function LoginPage() {
 
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const {login} = useAuth();
 
-// Nageva para a Home após o login
   async function handleLogin(event) {
     event.preventDefault();
 
   try {
     setLoading(true);
-    const userData = await login({email, password});
-    console.log('Usuário autenticado', userData);
-    console.log('Name', userData.result.user.name)
+    const userData = await loginAPI({email, password});
 
-      // Aqui você poderia salvar o token no localStorage, se retornar um
-      // localStorage.setItem('token', userData.token);
-
+    login(userData.result);
     navigate('/home')
     
   } catch (error) {

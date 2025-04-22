@@ -3,9 +3,20 @@ import { FaShoppingCart, FaChartBar, FaMoneyCheck , FaCog, FaBoxOpen , FaUsers, 
 import { IconButton } from "../components/IconButton";
 import { IoMdExit } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/authContext";
+import { useEffect } from "react";
 
-export function Dashboard(){
+export function Dashboard() {
   const navigate = useNavigate()
+  // importante os dados de authContext = objeto, função, váriaveis...
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    // passando o navigate por parametro para poder ser usado fora da arvore de elementos BrowserRouter.
+    // apenas componentes dentro da arvore do BrowserRouter podem usar o navigate.
+    logout(navigate);
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       {/* Título */}
@@ -13,16 +24,18 @@ export function Dashboard(){
           <div className="w-full"><h1 className="text-3xl font-semibold">Inicio SysNext</h1></div>
           <div className="w-full flex flex-row gap-2 items-center justify-start absolute px-10">
             <FaRegUserCircle className="text-xl"/>
-            <p>leo</p>
+            {
+              // if ternário ? : 
+              user ? user.name : 'Carregando...'
+            }
           </div>
           <div className="w-full flex flex-row gap-2 items-center justify-end absolute px-10">
             <p>sair</p>
-            <a href="">
-              <IoMdExit 
-                className="text-2xl"
-                onClick={() => {alert('Apertou')}}
-              />
-            </a>
+            <button
+              onClick={handleLogout}
+            >
+              <IoMdExit className="text-2xl" /> 
+            </button>
           </div>
       </div>
 
@@ -85,6 +98,6 @@ export function Dashboard(){
       </footer>
     </div>
   );
-};
+}
 
 export default Dashboard;
