@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes} from "react-router-dom";
 import  {Dashboard}  from "../pages/home"
 import { LoginPage } from "../pages/login"
 import { VendasPage } from "../pages/sales";
+import { Product } from "../pages/products"
 import { AuthProvider } from "../components/authContext";
 
 
@@ -25,6 +26,10 @@ export function Navigation() {
                     <Route 
                         path="/sales"
                         element={ <VendasPage /> }
+                    />
+                    <Route 
+                        path="/products"
+                        element={ <Product /> }
                     />
                 </Routes>
             </AuthProvider>

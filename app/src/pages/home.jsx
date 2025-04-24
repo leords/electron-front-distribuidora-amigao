@@ -4,7 +4,6 @@ import { IconButton } from "../components/IconButton";
 import { IoMdExit } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/authContext";
-import { useEffect } from "react";
 
 export function Dashboard() {
   const navigate = useNavigate()
@@ -16,6 +15,7 @@ export function Dashboard() {
     // apenas componentes dentro da arvore do BrowserRouter podem usar o navigate.
     logout(navigate);
   }
+  
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
@@ -67,7 +67,7 @@ export function Dashboard() {
           icon={FaBoxOpen}
           styleIcon="text-orange-500"
           label="Produtos"
-          onClick={() => ('')}
+          onClick={() => (navigate('/products'))}
         />
         <IconButton
           className="bg-white"
