@@ -27,10 +27,8 @@ export function Product() {
         supplier: filters.supplier,
         status: filters.status
       };
-      console.log("Enviando filtros:", params)
       const data = await productsAPI(params);
       setProducts(data);
-      console.log(products)
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     }
@@ -131,7 +129,7 @@ export function Product() {
             products.map((prod) => (
               <div
                 key={prod.id}
-                className="grid grid-cols-7 gap-4 px-2 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="grid grid-cols-7 gap-4 px-2 py-2 text-xs text-gray-700 hover:bg-gray-100"
               >
                 <span>{prod.id}</span>
                 <span>{prod.name}</span>

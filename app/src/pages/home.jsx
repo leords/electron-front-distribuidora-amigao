@@ -1,103 +1,35 @@
-
-import { FaShoppingCart, FaChartBar, FaMoneyCheck , FaCog, FaBoxOpen , FaUsers, FaTruckMoving, FaRegUserCircle} from "react-icons/fa";
-import { IconButton } from "../components/IconButton";
-import { IoMdExit } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../components/authContext";
-
-export function Dashboard() {
-  const navigate = useNavigate()
-  // importante os dados de authContext = objeto, função, váriaveis...
-  const { user, logout } = useAuth();
-
-  const handleLogout = () => {
-    // passando o navigate por parametro para poder ser usado fora da arvore de elementos BrowserRouter.
-    // apenas componentes dentro da arvore do BrowserRouter podem usar o navigate.
-    logout(navigate);
-  }
-  
+export function DashboardHome() {
+  const buttons = [
+    { label: "Vendas", icon: FaShoppingCart, color: "text-rose-500" },
+    { label: "Cargas", icon: FaTruck, color: "text-sky-500" },
+    { label: "Financeiro", icon: FaCreditCard, color: "text-yellow-500" },
+    { label: "Produtos", icon: FaBoxOpen, color: "text-orange-500" },
+    { label: "Clientes", icon: FaUsers, color: "text-pink-500" },
+    { label: "Resultados", icon: FaChartBar, color: "text-yellow-500" },
+    { label: "Outros", icon: FaCog, color: "text-rose-400" },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-      {/* Título */}
-      <div className="bg-gradient-to-br from-red-400 to-red-600 text-white py-4 w-full text-center flex flex-row">
-          <div className="w-full"><h1 className="text-3xl font-semibold">Inicio SysNext</h1></div>
-          <div className="w-full flex flex-row gap-2 items-center justify-start absolute px-10">
-            <FaRegUserCircle className="text-xl"/>
-            {
-              // if ternário ? : 
-              user ? user.name : 'Carregando...'
-            }
-          </div>
-          <div className="w-full flex flex-row gap-2 items-center justify-end absolute px-10">
-            <p>sair</p>
-            <button
-              onClick={handleLogout}
-            >
-              <IoMdExit className="text-2xl" /> 
-            </button>
-          </div>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <header className="flex justify-between items-center px-6 py-4 bg-white shadow-sm border-b">
+        <span className="text-gray-600 text-sm">👤 admin</span>
+        <h1 className="text-xl font-bold text-gray-800">Início SysNext</h1>
+        <button className="text-red-500 hover:text-red-600">
+          <FaSignOutAlt className="text-xl" />
+        </button>
+      </header>
 
-      {/* Ícones principais */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
-        <IconButton
-          className="bg-white"
-          icon={FaShoppingCart}
-          styleIcon="text-red-500"
-          label="Vendas"
-          onClick={() => (navigate('/sales'))}
-        />
-        <IconButton
-          className="bg-white"
-          icon={FaTruckMoving}
-          styleIcon="text-blue-500"
-          label="Cargas"
-          onClick={() => ('')}
-        />
-        <IconButton
-          className="bg-white"
-          icon={FaMoneyCheck}
-          styleIcon="text-yellow-500"
-          label="Financeiro"
-          onClick={() => ('')}
-        />
-        <IconButton
-          className="bg-white"
-          icon={FaBoxOpen}
-          styleIcon="text-orange-500"
-          label="Produtos"
-          onClick={() => (navigate('/products'))}
-        />
-        <IconButton
-          className="bg-white"
-          icon={FaUsers}
-          styleIcon="text-red-500"
-          label="Clientes"
-          onClick={() => ('')}
-        />
-        <IconButton
-          className="bg-white"
-          icon={FaChartBar}
-          styleIcon="text-yellow-500"
-          label="Resultados"
-          onClick={() => ('')}
-        />
-        <IconButton
-          className="bg-white"
-          icon={FaCog}
-          styleIcon="text-red-500"
-          label="Outros"
-          onClick={() => ('')}
-        />
-      </div>
-
-      {/* Rodapé */}
-      <footer className="mt-auto py-4 bg-gray-200 w-full text-center">
-        <p className="text-gray-600">© 2025 SysNext - Todos os direitos reservados por leords</p>
-      </footer>
+      <main className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {buttons.map(({ label, icon: Icon, color }) => (
+          <button
+            key={label}
+            className="bg-white rounded-2xl shadow-md hover:shadow-xl p-6 flex flex-col items-center justify-center transition"
+          >
+            <Icon className={`text-4xl mb-3 ${color}`} />
+            <span className="text-sm font-medium text-gray-700">{label}</span>
+          </button>
+        ))}
+      </main>
     </div>
   );
 }
-
-export default Dashboard;

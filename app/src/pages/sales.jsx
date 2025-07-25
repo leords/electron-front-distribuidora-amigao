@@ -1,5 +1,5 @@
 import React from "react";
-import { FaPlus, FaTrash, FaList, FaSearch, FaArrowLeft } from "react-icons/fa";
+import { FaPlus, FaTrash, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import {ActionButton} from '../components/actionButton'
 
@@ -13,7 +13,7 @@ export function VendasPage() {
   };
 
   const handleBackClick = () => {
-        navigate(-1)
+    navigate(-1) ;
   };
 
   return (
@@ -22,7 +22,7 @@ export function VendasPage() {
       <div className="w-full flex items-center mt-6 ml-20">
         <button
           onClick={handleBackClick}
-          className="flex items-center text-gray-700 hover:text-gray-900 transition text-lg hover:text-red-500"
+          className="flex items-center text-gray-700 transition text-lg hover:text-red-500"
         >
           <FaArrowLeft className="mr-2" />
           Voltar
@@ -41,24 +41,14 @@ export function VendasPage() {
           className="bg-green-500 text-white"
         />
         <ActionButton
-          label="Apagar Venda"
-          icon={FaTrash}
-          onClick={() => handleButtonClick("Apagar Venda")}
-          className="bg-red-500 text-white"
-        />
-        <ActionButton
           label="Lista de Vendas"
-          icon={FaList}
-          onClick={() => handleButtonClick("Lista de Vendas")}
+          icon={FaTrash}
+          onClick={() => navigate("/listSales")}
           className="bg-blue-500 text-white"
         />
-        <ActionButton
-          label="Buscar Venda"
-          icon={FaSearch}
-          onClick={() => handleButtonClick("Buscar Venda")}
-          className="bg-yellow-500 text-white"
-        />
+
       </div>
     </div>
   );
 }
+
