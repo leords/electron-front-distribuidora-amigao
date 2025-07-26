@@ -55,7 +55,6 @@ export function ListSales() {
 
       const data = await cartsAPI(params);
       setCarts(data);
-      console.log(data);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     }
@@ -165,7 +164,9 @@ export function ListSales() {
               <div
                 key={c.id}
                 className="grid grid-cols-6 gap-4 px-2 py-2 text-xs text-gray-700 hover:bg-gray-100"
-                onClick={() => navigate(`/listCarts/${c.id}`)}
+                onClick={() =>
+                  navigate(`/listCarts/${c.id}`, { state: { total: c.total } })
+                }
               >
                 <span>{dayjs(c.createdAt).format("DD/MM/YYYY")}</span>
                 <span>{c.client.name}</span>
