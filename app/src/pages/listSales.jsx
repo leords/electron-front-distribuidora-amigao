@@ -165,7 +165,18 @@ export function ListSales() {
                 key={c.id}
                 className="grid grid-cols-6 gap-4 px-2 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 onClick={() =>
-                  navigate(`/listCarts/${c.id}`, { state: { total: c.total } })
+                  navigate(`/listCarts/${c.id}`, {
+                    state: {
+                      total: c.total,
+                      formaPagamento: c.payment.name,
+                      data: c.createdAt,
+                      load: c.load,
+                      user: c.user.name,
+                      client: c.client.name,
+                      city: c.client.city,
+                      clientId: c.clientId,
+                    },
+                  })
                 }
               >
                 <span>{dayjs(c.createdAt).format("DD/MM/YYYY")}</span>
