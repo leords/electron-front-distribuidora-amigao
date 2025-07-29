@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaFileDownload, FaPrint } from "react-icons/fa";
 import { cartItensAPI } from "../services/cartItems";
 import { clientsAPI } from "../services/clients";
 import { HeaderEmpresa } from "../components/headerEmpresa";
 import dayjs from "dayjs";
+import { SalvarArquivo } from "../services/salvarArquivo";
+import { Imprimir } from "../services/imprimir";
 
 export function ListCarts() {
   const { id } = useParams();
@@ -14,10 +16,20 @@ export function ListCarts() {
   const location = useLocation();
   const { total, formaPagamento, data, load, user, client, city, clientId } =
     location.state || {};
+  const { salvarPDF } = SalvarArquivo();
+  const { imprimirArquivo } = Imprimir();
 
   // criando a data do pedido + 1 dia para ser referencia de data de entrega
   const dateObj = new Date(data);
   dateObj.setDate(dateObj.getDate() + 1);
+
+  const descricaoArquivo = `${dayjs(data).format(
+    "DD/MM/YYYY"
+  )}_${client}_pedido-${id}`;
+
+  const nomeArquivo = descricaoArquivo.replace(/\//g, "-");
+
+  console.log("nome", nomeArquivo);
 
   useEffect(() => {
     async function fetchCartItem() {
@@ -45,23 +57,33 @@ export function ListCarts() {
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen text-gray-800 flex justify-center flex-col items-center border">
-      <div className="w-full md:w-[80%]">
-        {/* Botão de voltar */}
-        <div className="mb-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="transition flex items-center gap-2 py-2 px-2 rounded-sm hover:bg-red-300"
-          >
-            <FaArrowLeft />
-            Voltar
+      {/* BOTÕES */}
+      <div className="flex flex-row justify-between items-center mb-4 w-full md:w-[80%] px-4 print:hidden">
+        <button
+          onClick={() => navigate(-1)}
+          className="transition flex items-center gap-2 py-2 px-2 rounded-sm"
+        >
+          <FaArrowLeft className="hover:text-yellow-600" />
+          Voltar
+        </button>
+        <div className="flex flex-row gap-4">
+          <button title="Baixar arquivo" onClick={() => salvarPDF(nomeArquivo)}>
+            <FaFileDownload size={20} className="hover:text-yellow-600" />
+          </button>
+          <button title="Imprimir arquivo" onClick={imprimirArquivo}>
+            <FaPrint size={20} className="hover:text-green-700" />
           </button>
         </div>
+      </div>
 
+      {/* INICIO DA NOTA */}
+      <div className="w-full md:w-[80%]">
+        {/* CABEÇALHO */}
         <div className="w-ful">
           <HeaderEmpresa />
         </div>
 
-        {/* Informações do pedido */}
+        {/* INFORMAÇÕES */}
         <div className="flex flex-col justify-between mb-10">
           <div className="flex flex-row justify-between mb-4 border px-4 py-1">
             <span className="flex text-xs text-gray-700 uppercase mb-1">
@@ -105,7 +127,7 @@ export function ListCarts() {
           </div>
         </div>
 
-        {/* Títulos */}
+        {/* TITULOS */}
         <div className="grid grid-cols-5 gap-4 px-2 text-sm font-semibold text-gray-600 border-b pb-2">
           <span>ID</span>
           <span>Produto</span>
@@ -114,7 +136,7 @@ export function ListCarts() {
           <span>Total</span>
         </div>
 
-        {/* Lista de Itens */}
+        {/* LISTA DOS PRODUTOS */}
         <div className="divide-y mt-2 border px-4 py-1">
           {itens.length > 0 ? (
             itens.map((item) => (
@@ -136,7 +158,7 @@ export function ListCarts() {
           )}
         </div>
 
-        {/* Footer do pedido */}
+        {/* RODAPÉ COM FORMA DE PAGAMENTO */}
         <div className="flex flex-row justify-between mt-40 border px-4 py-1">
           <span className="flex justify-end text-xs text-gray-700 uppercase">
             Forma de pagamento: {formaPagamento}
@@ -148,32 +170,34 @@ export function ListCarts() {
         <span className="flex justify-center text-xs text-gray-700 text-center mt-6">
           ** Este ticket não é documento fiscal **
         </span>
+        <span className="flex border border-dashed border-gray-300 mt-6"></span>
 
-        <div className="w-full flex h-16 mt-12 text-xs border text-gray-700 ">
+        {/* ASSINATURA DO CLIENTE */}
+        <div className="w-full flex mt-12 text-xs border text-gray-700 ">
           {/* PARTE 1 */}
-          <div className="flex w-[80%] flex-col justify-center">
-            <div className="flex pl-2 items-center pb-1">
-              <span className="uppercase">
+          <div className="flex w-[90%] flex-col justify-center">
+            <div className="flex pl-2 items-center">
+              <span className="flex uppercase text-[11px] py-1">
                 Recebemos da Distribuidora de bebidas Amigão os produtos
                 contantes da nota fiscal
               </span>
             </div>
             <div className="flex flex-row items-start border-t px-2">
-              <div className="uppercase w-[19%] border-r pr-3 pb-6 pt-1">
+              <div className="uppercase w-[30%] border-r pr-3 pb-6 text-[11px]">
                 Data de recebimento
               </div>
-              <div className="uppercase w-[81%] pl-3 pt-1">
+              <div className="uppercase w-[68%] pl-3 text-[11px]">
                 Identificação e Assinatura do Recebedor
               </div>
             </div>
           </div>
           {/* PARTE 2 */}
-          <div className="flex flex-col justify-center w-[20%] items-center h-16 text-sm font-semibold border-l ">
-            <span>Número do pedido: {id}</span>
+          <div className="flex flex-col justify-center w-[15%] items-center h-16 text-xs font-semibold border-l ">
+            <span>Nº do pedido: {id}</span>
             <span className="mt-1">R$ {parseFloat(total).toFixed(2)}</span>
           </div>
         </div>
-        <div className="flex flex-col border text-xs text-gray-700 mt-4 w-full h-20  p-1">
+        <div className="flex flex-col border text-xs text-gray-700 mt-4 w-full h-20 p-1 text-[11px]">
           <span className="uppercase">Observação do cliente:</span>
         </div>
       </div>
