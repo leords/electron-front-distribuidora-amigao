@@ -1,12 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Dashboard } from "../pages/home";
+import { TelaInicial } from "../pages/inicio";
 import { LoginPage } from "../pages/login";
 import { VendasPage } from "../pages/sales";
 import { Product } from "../pages/products";
 import { AuthProvider } from "../components/authContext";
-import { Client } from "../pages/clients";
+import { Clientes } from "../pages/clientes";
 import { ListSales } from "../pages/listSales";
-import { ListCarts } from "../pages/listCarts";
+import { Pedido } from "../pages/pedido";
+import { Carga } from "../pages/carga";
 
 export function Navigation() {
   return (
@@ -17,12 +18,13 @@ export function Navigation() {
         <Routes>
           {/*Dentro do elemento é adicionado o requique */}
           <Route path="/" element={<LoginPage />} />
-          <Route path="/home" element={<Dashboard />} />
+          <Route path="/inicio" element={<TelaInicial />} />
           <Route path="/sales" element={<VendasPage />} />
           <Route path="/products" element={<Product />} />
-          <Route path="/clients" element={<Client />} />
+          <Route path="/clients" element={<Clientes />} />
           <Route path="/listSales" element={<ListSales />} />
-          <Route path="/listCarts/:id" element={<ListCarts />} />
+          <Route path="/pedido/:id" element={<Pedido />} />
+          <Route path="/carga" element={<Carga />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

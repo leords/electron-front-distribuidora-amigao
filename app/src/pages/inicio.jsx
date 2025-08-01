@@ -12,9 +12,8 @@ import { IconButton } from "../components/IconButton";
 import { IoMdExit } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/authContext";
-import { useEffect } from "react";
 
-export function Dashboard() {
+export function TelaInicial() {
   const navigate = useNavigate();
   // importante os dados de authContext = objeto, função, váriaveis...
   const { user, logout } = useAuth();
@@ -61,7 +60,7 @@ export function Dashboard() {
           icon={FaTruckMoving}
           styleIcon="text-blue-500"
           label="Cargas"
-          onClick={() => ""}
+          onClick={() => navigate("/carga")}
         />
         <IconButton
           className="bg-white"
@@ -110,4 +109,4 @@ export function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default TelaInicial;

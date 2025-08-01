@@ -1,42 +1,41 @@
-
-import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo_amigao.png'
-import React, { useState } from 'react';
-import { loginAPI } from '../services/authService.js';
-import { useAuth } from '../components/authContext.jsx';
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo_amigao.png";
+import React, { useState } from "react";
+import { loginAPI } from "../services/API/usuario/autenticacaoUsuario.js";
+import { useAuth } from "../components/authContext.jsx";
 
 // Página de login
 export function LoginPage() {
-
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const {login} = useAuth();
+  const { login } = useAuth();
 
   async function handleLogin(event) {
     event.preventDefault();
 
-  try {
-    setLoading(true);
-    const userData = await loginAPI({email, password});
+    try {
+      setLoading(true);
+      const userData = await loginAPI({ email, password });
 
-    login(userData.result);
-    navigate('/home')
-    
-  } catch (error) {
-    alert(error.message)
-  } finally {
-    setLoading(false)
+      login(userData.result);
+      navigate("/inicio");
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
-} 
-  
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Coluna Esquerda: Nome do Sistema */}
       <div className="flex flex-col items-center justify-center w-1/2 bg-gradient-to-br from-red-400 to-red-600 text-white">
-        <h1 className="text-xl font-light tracking-wide mb-4">Bem-vindo ao sistema de vendas</h1>
+        <h1 className="text-xl font-light tracking-wide mb-4">
+          Bem-vindo ao sistema de vendas
+        </h1>
         <h1 className="text-6xl font-light tracking-wide">SysNext</h1>
       </div>
 
@@ -45,11 +44,7 @@ export function LoginPage() {
         <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
           {/* Logo */}
           <div className="flex justify-center mb-6">
-            <img
-              src={logo}
-              alt="Logo Amigão Distribuidora"
-              className="h-44"
-            />
+            <img src={logo} alt="Logo Amigão Distribuidora" className="h-44" />
           </div>
 
           {/* Formulário */}
@@ -59,14 +54,14 @@ export function LoginPage() {
                 htmlFor="login"
                 className="block mb-1 text-sm text-gray-600"
               >
-                Usuário
+                E-mail
               </label>
               <input
                 type="text"
                 id="login"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-300"
                 placeholder="Digite seu login"
-                value={email || ''}
+                value={email || ""}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -83,17 +78,16 @@ export function LoginPage() {
                 id="password"
                 className="w-full mb-8 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-300"
                 placeholder="Digite sua senha"
-                value={password || ''}
+                value={password || ""}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             <button
-              
               type="submit"
               className="w-full px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
             >
-              { loading ? 'Entrando...' : 'Entrar' }
+              {loading ? "Entrando..." : "Entrar"}
             </button>
           </form>
 
@@ -105,6 +99,6 @@ export function LoginPage() {
       </div>
     </div>
   );
-};
+}
 
 export default LoginPage;

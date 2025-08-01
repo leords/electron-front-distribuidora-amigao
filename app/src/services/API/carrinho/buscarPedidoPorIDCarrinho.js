@@ -5,7 +5,7 @@ const api = axios.create({
   timeout: 5000, // se a resposta demorar mais que 5 segundos, dá erro
 });
 
-export const cartItensAPI = async (params = {}) => {
+export const BuscarPedidoPorIDCarrinho = async (params = {}) => {
   try {
     const response = await api.get("/read-item", { params });
     //const response = await api.get(`/read-item/${params}`);

@@ -1,42 +1,43 @@
 import { useEffect, useState } from "react";
-import { productsAPI } from "../services/API/produto/buscarProdutos.js";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
+import { buscarClientesAPI } from "../services/API/cliente/buscarClientes.js";
 
-export function Product() {
-  const [products, setProducts] = useState([]);
-  const [filters, setFilters] = useState({
+export function Clientes() {
+  const navigate = useNavigate();
+  const [clientes, setClientes] = useState([]);
+  const [filtros, setFiltros] = useState({
     nome: "",
-    supplier: "",
-    segment: "",
+    cidade: "",
+    vendedor: "",
+    diaAtendimento: "",
     status: "",
   });
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    fetchProducts();
+    buscarClientes();
   }, []);
 
-  const fetchProducts = async () => {
+  const buscarClientes = async () => {
     try {
       const params = {
-        name: filters.name,
-        segment: filters.segment,
-        supplier: filters.supplier,
-        status: filters.status,
+        name: filtros.nome,
+        city: filtros.cidade,
+        salesman: filtros.vendedor,
+        serviceDay: filtros.diaAtendimento,
+        status: filtros.status,
       };
-      const data = await productsAPI(params);
-      setProducts(data);
+      const data = await buscarClientesAPI(params);
+      setClientes(data);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     }
   };
 
-  const handleChange = (e) => {
+  const tratarEventos = (e) => {
     const { name, value } = e.target;
 
-    setFilters((prev) => ({
+    setFiltros((prev) => ({
       ...prev,
       [name]:
         name === "status"
@@ -49,8 +50,8 @@ export function Product() {
     }));
   };
 
-  const handleSearch = () => {
-    fetchProducts();
+  const buscar = () => {
+    buscarClientes();
   };
 
   return (
@@ -60,7 +61,7 @@ export function Product() {
         <div className="mb-4">
           <button
             onClick={() => navigate(-1)}
-            className="transition flex items-center gap-2 py-2 px-2 rounded-md "
+            className="transition flex items-center gap-2 py-2 px-2 rounded-md"
           >
             <FaArrowLeft />
           </button>
@@ -71,31 +72,39 @@ export function Product() {
           <input
             type="text"
             name="name"
-            value={filters.name}
-            onChange={handleChange}
+            value={filtros.nome}
+            onChange={tratarEventos}
             placeholder="Buscar por nome"
             className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
           <input
             type="text"
-            name="supplier"
-            value={filters.supplier}
-            onChange={handleChange}
-            placeholder="Buscar por fornecedor"
+            name="city"
+            value={filtros.cidade}
+            onChange={tratarEventos}
+            placeholder="Buscar por cidade"
             className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
           <input
             type="text"
-            name="segment"
-            value={filters.segment}
-            onChange={handleChange}
-            placeholder="Buscar por segmento"
+            name="salesman"
+            value={filtros.vendedor}
+            onChange={tratarEventos}
+            placeholder="Buscar por vendedor"
+            className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+          <input
+            type="text"
+            name="serviceDay"
+            value={filtros.diaAtendimento}
+            onChange={tratarEventos}
+            placeholder="Buscar por dia de visita"
             className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
           <select
             name="status"
-            value={filters.status}
-            onChange={handleChange}
+            value={filtros.status}
+            onChange={tratarEventos}
             className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
             <option value="">Todos</option>
@@ -103,7 +112,7 @@ export function Product() {
             <option value="false">Inativos</option>
           </select>
           <button
-            onClick={handleSearch}
+            onClick={buscar}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
           >
             Buscar
@@ -111,42 +120,44 @@ export function Product() {
         </div>
 
         {/* Títulos */}
-        <div className="grid grid-cols-7 gap-4 px-2 text-sm font-semibold text-gray-600 border-b pb-2">
+        <div className="grid grid-cols-8 gap-4 px-2 text-sm font-semibold text-gray-600 border-b pb-2">
           <span>ID</span>
           <span>Nome</span>
-          <span>Preço</span>
-          <span>Segmento</span>
-          <span>Fornecedor</span>
-          <span>Peso</span>
+          <span>Telefone</span>
+          <span>Endereço</span>
+          <span>Cidade</span>
+          <span>Vendedor</span>
+          <span>Atendimento</span>
           <span>Status</span>
         </div>
 
-        {/* Lista de produtos */}
+        {/* Lista de clientes */}
         <div className="divide-y mt-2">
-          {products.length > 0 ? (
-            products.map((prod) => (
+          {clientes.length > 0 ? (
+            clientes.map((client) => (
               <div
-                key={prod.id}
-                className="grid grid-cols-7 gap-4 px-2 py-2 text-xs text-gray-700 hover:bg-gray-100"
+                key={client.id}
+                className="grid grid-cols-8 gap-4 px-2 py-2 text-xs text-gray-700 hover:bg-gray-100"
               >
-                <span>{prod.id}</span>
-                <span>{prod.name}</span>
-                <span>R$ {parseFloat(prod.price).toFixed(2)}</span>
-                <span>{prod.segment}</span>
-                <span>{prod.supplier}</span>
-                <span>{prod.weight}kg</span>
+                <span>{client.id}</span>
+                <span>{client.name}</span>
+                <span>{client.phone}</span>
+                <span>{client.address}</span>
+                <span>{client.city}</span>
+                <span>{client.salesman}</span>
+                <span>{client.serviceDay}</span>
                 <span
                   className={
-                    prod.status === true ? "text-green-600" : "text-red-600"
+                    client.status === true ? "text-green-600" : "text-red-600"
                   }
                 >
-                  {prod.status === true ? "Ativo" : "Inativo"}
+                  {client.status === true ? "Ativo" : "Inativo"}
                 </span>
               </div>
             ))
           ) : (
             <div className="text-center text-gray-500 py-4">
-              Nenhum produto encontrado
+              Nenhum cliente encontrado
             </div>
           )}
         </div>
@@ -155,4 +166,4 @@ export function Product() {
   );
 }
 
-export default Product;
+export default Clientes;

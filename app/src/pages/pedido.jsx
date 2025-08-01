@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FaArrowLeft, FaFileDownload, FaPrint } from "react-icons/fa";
-import { cartItensAPI } from "../services/cartItems";
-import { clientsAPI } from "../services/clients";
+import { BuscarPedidoPorIDCarrinho } from "../services/API/carrinho/buscarPedidoPorIDCarrinho";
+import { buscarClientesAPI } from "../services/API/cliente/buscarClientes";
 import { HeaderEmpresa } from "../components/headerEmpresa";
-import dayjs from "dayjs";
-import { SalvarArquivo } from "../services/salvarArquivo";
-import { Imprimir } from "../services/imprimir";
+import { SalvarArquivo } from "../services/Print/salvarArquivo";
+import { Imprimir } from "../services/Print/imprimir";
 
-export function ListCarts() {
+import dayjs from "dayjs";
+
+export function Pedido() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [itens, setItens] = useState([]);
@@ -29,12 +30,10 @@ export function ListCarts() {
 
   const nomeArquivo = descricaoArquivo.replace(/\//g, "-");
 
-  console.log("nome", nomeArquivo);
-
   useEffect(() => {
     async function fetchCartItem() {
       try {
-        const data = await cartItensAPI({ id: id });
+        const data = await BuscarPedidoPorIDCarrinho({ id: id });
         setItens(data);
       } catch (error) {
         console.error("Erro ao buscar itens do carrinho", error);
@@ -46,7 +45,7 @@ export function ListCarts() {
   useEffect(() => {
     async function fetchClient() {
       try {
-        const clientSelect = await clientsAPI({ id: clientId });
+        const clientSelect = await buscarClientesAPI({ id: clientId });
         setInfoClient(clientSelect);
       } catch (error) {
         console.error("Erro ao buscar itens do carrinho", error);
@@ -204,3 +203,5 @@ export function ListCarts() {
     </div>
   );
 }
+
+export default Pedido;

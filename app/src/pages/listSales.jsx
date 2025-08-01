@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { cartsAPI } from "../services/sales";
-import { clientsAPI } from "../services/clients";
-import { paymentsAPI } from "../services/payments";
-import { usersAPI } from "../services/user";
+import { cartsAPI } from "../services/API/carrinho/sales";
+import { buscarClientesAPI } from "../services/API/cliente/buscarClientes";
+import { paymentsAPI } from "../services/API/pagamento/payments";
+import { usersAPI } from "../services/API/usuario/user";
 import dayjs from "dayjs";
 
 export function ListSales() {
@@ -27,7 +27,7 @@ export function ListSales() {
     async function fetchOptionsFilters() {
       try {
         const [clientsData, usersData, paymentsData] = await Promise.all([
-          clientsAPI(),
+          buscarClientesAPI(),
           usersAPI(),
           paymentsAPI(),
         ]);
@@ -165,7 +165,7 @@ export function ListSales() {
                 key={c.id}
                 className="grid grid-cols-6 gap-4 px-2 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 onClick={() =>
-                  navigate(`/listCarts/${c.id}`, {
+                  navigate(`/pedido/${c.id}`, {
                     state: {
                       total: c.total,
                       formaPagamento: c.payment.name,
